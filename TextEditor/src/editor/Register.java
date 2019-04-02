@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class Register extends JPanel implements ActionListener {
     JLabel userLabel = new JLabel("Enter a username");
@@ -58,9 +60,13 @@ public class Register extends JPanel implements ActionListener {
                         String[] userPwd = line.split("/");
                         if(userPwd[0].equals(userField.getText())){
                             System.out.println("User already exists");
+                            return;
                         }
                     }
-                } catch (IOException ioe) {
+                    MessageDigest msgDigest = MessageDigest.getInstance("SHA-256");
+                    msgDigest.update(password.getBytes());
+                    StringBuffer sb = new StringBuffer();
+                } catch (IOException | NoSuchAlgorithmException ioe) {
                     System.out.println("Error - "+ioe.getMessage());
                 }
             }
