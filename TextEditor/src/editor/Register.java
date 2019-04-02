@@ -47,28 +47,46 @@ public class Register extends JPanel implements ActionListener {
             if (password.equals(String.valueOf(confirmPwdField.getPassword()))) {
                 System.out.println("Passwords Match");
                 File pwdFile = new File(System.getProperty("user.dir") + "\\files\\password.txt");
-                if(!pwdFile.exists()) {
+                if (!pwdFile.exists()) {
                     try {
                         pwdFile.createNewFile();
-                    } catch (IOException ioe){
+                    } catch (IOException ioe) {
                         ioe.printStackTrace();
+                        System.exit(0);
                     }
                 }
                 try (BufferedReader buffReader = new BufferedReader(new FileReader(pwdFile))) {
                     String line;
-                    while((line=buffReader.readLine()) != null) {
+                    while ((line = buffReader.readLine()) != null) {
                         String[] userPwd = line.split("/");
-                        if(userPwd[0].equals(userField.getText())){
+                        if (userPwd[0].equals(userField.getText())) {
                             System.out.println("User already exists");
                             return;
                         }
                     }
+                } catch (IOException ioe) {
+                    System.out.println("Error - " + ioe.getMessage());
+                    System.exit(0);
+                }
+                StringBuffer sb = new StringBuffer();
+                try {
                     MessageDigest msgDigest = MessageDigest.getInstance("SHA-256");
                     msgDigest.update(password.getBytes());
-                    StringBuffer sb = new StringBuffer();
-                } catch (IOException | NoSuchAlgorithmException ioe) {
-                    System.out.println("Error - "+ioe.getMessage());
+                    byte[] byteData = msgDigest.digest();
+                    for (int i = 0, len = byteData.length; i < len; i++)
+                        sb.append(Integer.toString((byteData[i] & 0xFF) + 0x100, 16).substring(1));
+                } catch (NoSuchAlgorithmException nsae) {
+                    nsae.printStackTrace();
+                    System.exit(0);
                 }
+                try(PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(pwdFile,true)),true)){
+                    writer.println(userField.getText()+"/"+sb.toString());
+                } catch (IOException ioe){
+                    ioe.printStackTrace();
+                    System.exit(0);
+                }
+                Login login = (Login)getParent();
+                login.cardLayout.show(login,"login");
             }
         }
     }
