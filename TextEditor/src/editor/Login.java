@@ -70,7 +70,9 @@ public class Login extends JPanel implements ActionListener {
                 System.out.println("Wrong password!");
                 System.exit(0);
             } else{
-                System.out.println("Login successful!");
+                FileBrowser fileBrowser = new FileBrowser(userField.getText());
+                add(fileBrowser,"filebrowser");
+                cardLayout.show(this,"filebrowser");
             }
         }
     }
