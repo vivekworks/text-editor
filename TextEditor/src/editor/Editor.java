@@ -24,10 +24,8 @@ public class Editor extends JPanel implements ActionListener {
         else {
             try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
                 String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                    editorArea.setText(line + "\n");
-                }
+                while ((line = reader.readLine()) != null)
+                    editorArea.append(line + "\n");
             }
         }
         add(editorPane);
@@ -50,7 +48,7 @@ public class Editor extends JPanel implements ActionListener {
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
-            if(eventButton==saveCloseButton){
+            if (eventButton == saveCloseButton) {
                 System.exit(0);
             }
         }

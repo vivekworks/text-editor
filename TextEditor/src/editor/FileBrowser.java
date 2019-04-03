@@ -52,7 +52,6 @@ public class FileBrowser extends JPanel implements ActionListener {
                 fileToEdit=fileName.getText()+ ".txt";
              else if (e.getSource() == openButton) {
                 fileToEdit = buttonGroup.getSelection().getActionCommand();
-                System.out.println("FIle to Edit :"+fileToEdit);
             }
             Editor editor = new Editor(currentDirectory.getAbsolutePath() + "\\" + fileToEdit);
             Login login = (Login) getParent();
